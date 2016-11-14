@@ -1,0 +1,121 @@
+// Code given by JJ in class
+
+public class LinkedBSTree<T extends Comparable> {
+	private class Node{
+		private T data;
+		private Node leftChild;
+		private Node rightChild;
+		//private Node parent;
+		public Node(T aData){
+			data = aData;
+			leftChild = null;
+			rightChild = null;
+		}
+	}
+	private Node root;
+	public LinkedBSTree(){
+		root = null;
+	}
+	public void insert(T data){
+		if(root == null) // Tree Empty
+			root = new Node(data);
+		else
+			insert(root,data); // Recursive Call Below
+	}
+	private Node insert(Node aNode, T data){
+		if(aNode == null){
+			aNode = new Node(data);
+		}
+		else if(data.compareTo(aNode.data) < 0){ // Go Left
+			aNode.leftChild = insert(aNode.leftChild,data);
+		}
+		else if(data.compareTo(aNode.data) >= 0){ // Go Right
+			aNode.rightChild = insert(aNode.rightChild,data);
+		}
+		return aNode;
+	}
+	public void delete(T data){
+		delete(root,data);
+	}
+	private Node delete(Node aNode, T data){
+		// Find the Value
+		if(aNode == null){ // Data not Found
+			return null;
+		}
+		if(data.compareTo(aNode.data) < 0){// Go LEFT
+			aNode.leftChild = delete(aNode.leftChild,data);
+		}
+		else if(data.compareTo(aNode.data) > 0) { // GO RIGHT
+			aNode.rightChild = delete(aNode.rightChild,data);
+		}
+		else{ // Found the value to delete
+			if(aNode.rightChild == null) // Either no children or just left
+				return aNode.leftChild;
+			if(aNode.leftChild == null) // Right Child Only
+				return aNode.rightChild;
+			// We have two children if it reaches here
+			Node temp = aNode;
+			// find the minimum in the tree
+			aNode = findMinTree(aNode.rightChild); // Assigning smallest in right to aNode founded by method
+			//delete the duplicate min rightsub tree
+			aNode.rightChild = deleteMinFromTree(aNode.rightChild); 
+			aNode.leftChild = temp.leftChild; // make sure to keep reference preserving links
+		}
+		return aNode;
+	}
+	private Node findMinTree(Node aNode){
+		if(aNode == null)
+			return null;
+		if(aNode.leftChild == null)
+			return aNode;
+		else
+			return findMinTree(aNode.leftChild);
+	}
+	private Node deleteMinFromTree(Node aNode){
+		if(aNode == null)
+			return null;
+		if(aNode.leftChild == null)
+			return aNode;
+		aNode.leftChild = deleteMinFromTree(aNode.leftChild);
+		return aNode;
+	}
+	public void printPreOrder(){ // Pre-Order Traversal
+		printPreOrder(root);
+	}
+	private void printPreOrder(Node aNode){ // Pre-order Traversal
+		if(aNode == null)
+			return;
+		System.out.println(aNode.data);
+		if(aNode.leftChild != null)
+			printPreOrder(aNode.leftChild);
+		if(aNode.rightChild != null)
+			printPreOrder(aNode.rightChild);
+		return;
+	}
+	public void printInOrder(){ // InOrder Sorted Traversals
+		printInOrder(root);
+	}
+	private void printInOrder(Node aNode){
+		if(aNode == null)
+			return;
+		if(aNode.leftChild != null)
+			printInOrder(aNode.leftChild);
+		
+		System.out.println(aNode.data);
+		
+		if(aNode.rightChild != null)
+			printInOrder(aNode.rightChild);
+		return;
+	}
+	public void printPostOrder(){
+		printPostOrder(root);
+	}
+	private void printPostOrder(Node aNode) {  
+		  if(aNode !=  null) {  
+		   printPostOrder(aNode.leftChild);  
+		   printPostOrder(aNode.rightChild);     
+		   System.out.println(aNode.data);  
+		  }  
+		 }  
+
+}
