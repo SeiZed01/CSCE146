@@ -1,0 +1,30 @@
+import java.util.Scanner;
+import java.io.*;
+public class FruitTester {
+	public static void main(String[] args){
+		LinkedBSTree<Fruit> fruitTree = new LinkedBSTree<Fruit>();
+		System.out.println("Welcome to the Fruit Tree! ");
+		try{
+			System.out.println("Reading from the tree file...");
+			Scanner sc = new Scanner(new File("fruitFile.txt")); // fruitFile should be in the folder above src.(The Project Folder)
+			while(sc.hasNextLine()){
+				String line = sc.nextLine();
+				String[] splitter = line.split("\t");
+					Double weight = Double.parseDouble(splitter[1]);
+					fruitTree.insert(new Fruit(splitter[0],weight));
+			}
+			System.out.println("\nPrinting the in-order traversal\n");
+			fruitTree.printInOrder();
+			System.out.println("\nPrinting the pre-order traversal\n");
+			fruitTree.printPreOrder();
+			System.out.println("\nPrinting the post-order traversal\n");
+			fruitTree.printPostOrder();
+			System.out.println("\nDeleting Kiwi 4.969338821021524\n");
+			fruitTree.delete(new Fruit("Kiwi", 4.969338821021524));
+			System.out.println("Printing the In-Order Traversal");
+			fruitTree.printInOrder();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+}
